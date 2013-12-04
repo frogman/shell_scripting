@@ -1,0 +1,11 @@
+#!/bin/sh
+#Zeljko Milinovic - http://itstuffallaround.blogspot.com/
+#a script for listing a huge amount of users under the dovecot folder and folder size
+
+for USER in `ls /home/mail/example.com/`;  do
+
+    du -h --max-depth=0 /home/mail/example.com/$USER >> USERS.txt;
+
+done
+
+echo 'Finished task. The list is inside the USERS.txt file !'
