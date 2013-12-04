@@ -1,0 +1,45 @@
+#Zeljko Milinovic - http://itstuffallaround.blogspot.com/
+#Cached lookup of ddos whois IP sockets
+#v1.3
+#!/bin/bash
+
+cachefile="$HOME/ddostestercache"
+
+# return 0 if address is to be filtered from the processed
+filter()
+{
+case "$1" in
+0.* | 127.* | 10.* | 172.1[6-9].* | 172.2[0-9].* | 172.3[0-1].* | 192.168.* | 169.254.*)
+return 0
+;;
+esac
+return 1
+}
+
+remote_ips()
+{
+# print only IPv4 addresses
+netstat -tun4 | awk '/:/ {gsub(/:.*/,"",$5);print $5}' | sort -n | uniq -c
+}
+
+get_country()
+{
+local country=$(sed -nr "s/^$1 (.*)/\1/p" $cachefile 2>/dev/null)
+if [ -z "$country" ];then
+# some queries produce multiple lines so for now use only the first line..
+country=$(whois "$1" | sed -nr 's/^country:[[:space:]]+(.*)/\1/ip' | head -1)
+country=${country:-unknown}
+# cache search result for future use
+echo "$1 $country" >> $cachefile
+fi
+
+# let's not print the text "unknown" to screen
+[ "$country" = "unknown" ] && unset country
+echo "$country"
+}
+
+remote_ips | while read count ip;do
+if ! filter $ip;then
+echo "$count $ip $(get_country $ip)"
+fi
+done
