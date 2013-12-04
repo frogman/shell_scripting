@@ -1,0 +1,12 @@
+#!/bin/bash
+#http://itstuffallaround.blogspot.com/
+#program to check if connection is possible with Dovecot and log errors and succesfull connections
+
+#simple cron job every minute is enough
+#The 2>&1 part means "redirect both the output and the error streams". Even if your program writes to stderr, that output will not be shown.
+
+if telnet localhost 143 </dev/null 2>&1 | grep -q Escape; then
+  echo "Connected Dovecot on $(date)" >> DOVSTATUS.txt
+else
+  echo "No connection to Dovecot on $(date)"  >> DOVSTATUS.txt
+fi
