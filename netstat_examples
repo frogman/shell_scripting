@@ -1,0 +1,33 @@
+Some great examples from: https://www.commandlinefu.com/commands/using/netstat
+
+Graph # of connections for each hosts.
+netstat -an | grep ESTABLISHED | awk '{print $5}' | awk -F: '{print $1}' | sort | uniq -c | awk '{ printf("%s\t%s\t",$2,$1) ; for (i = 0; i < $1; i++) {printf("*")}; print "" }'
+
+List the number and type of active network connections
+netstat -ant | awk '{print $NF}' | grep -v '[a-z]' | sort | uniq -c
+
+Find All computers connected to my host
+netstat -lantp | grep ESTABLISHED |awk '{print $5}' | awk -F: '{print $1}' | sort -u
+
+Show which programs are listening on TCP and UDP ports
+-p Tell me the name of the program and it's PID -l that is listening -u on a UDP port. -n Give me numeric IP addresses (don't resolve them) -t oh, also TCP ports 
+netstat -plunt
+
+###COUNT Number of connectios per IP on the server###
+netstat -ntu | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n
+
+####Count against ddos attack###
+netstat -anp |grep 'tcp\|udp' | awk '{print $5}' | sed s/::ffff:// | cut -d: -f1 | sort | uniq -c | sort -n
+
+See KeepAlive counters on tcp connections
+netstat -town
+
+List programs with open ports and connections
+netstat -ntauple
+
+List top 20 IP from which TCP connection is in SYN_RECV state. Useful on web servers to detect a syn flood attack. Replace SYN_ with ESTA to find established connections
+netstat -pant 2> /dev/null | grep SYN_ | awk '{print $5;}' | cut -d: -f1 | sort | uniq -c | sort -n | tail -20
+
+Show in a web server, running in the port 80, how many ESTABLISHED connections by ip it has.
+netstat -ant | grep :80 | grep ESTABLISHED | awk '{print $5}' | awk -F: '{print $1}' | sort | uniq -c | sort -n
+
