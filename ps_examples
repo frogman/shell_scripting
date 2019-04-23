@@ -1,0 +1,31 @@
+Many other useful commands sorted from: https://www.commandlinefu.com/commands/view/3/display-the-top-ten-running-processes-sorted-by-memory-usage
+
+Find top running processes by highest memory and CPU usage in Linux.
+$ ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head
+OR
+$ ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head
+
+Display the top processes sorted by memory usage. This is mostly useful because it's easy to remember and can give me a quick 'top' view of a group of servers when used over pssh.
+top -b -o +%MEM |head -17
+
+Display the top ten running processes - sorted by memory usage 
+ps aux | sort -nk +4 | tail
+
+Display the top ten running processes - sorted by memory usage
+ps aux --sort -rss | head
+
+A process tree shows how processes on the system are linked to each other; processes whose parents have been killed are adopted by the init (or systemd).
+ps -e --forest 
+
+Print APACHE PROCESS THREADS
+ps -fL -C httpd
+
+Grep all Tomcat Processes
+ps -ef | grep tomcat
+
+The command below allows you to view the PID, PPID, user name and command of a process.
+ps -eo pid,ppid,user,cmd
+
+Check Execution time of a process
+ps -eo comm,etime,user | grep httpd
+
