@@ -1,0 +1,30 @@
+AWK
+awk '{ print $2, $1 }' file                  # Print and inverse first two columns
+awk '{printf("%5d : %s\n", NR,$0)}' file     # Add line number left aligned
+awk '{print FNR "\t" $0}' files              # Add line number right aligned
+awk NF test.txt                              # remove blank lines (same as grep '.')
+awk 'length > 80'   
+
+SED
+sed 's/string1/string2/g'                    # Replace string1 with string2
+sed -i 's/wroong/wrong/g' *.txt              # Replace a recurring word with g
+sed 's/\(.*\)1/\12/g'                        # Modify anystring1 to anystring2
+sed '/<p>/,/<\/p>/d' t.xhtml                 # Delete lines that start with <p>
+                                             # and end with </p>
+sed '/ *#/d; /^ *$/d'                        # Remove comments and blank lines
+sed 's/[ \t]*$//'                            # Remove trailing spaces (use tab as \t)
+sed 's/^[ \t]*//;s/[ \t]*$//'                # Remove leading and trailing spaces
+sed 's/[^*]/[&]/'                            # Enclose first char with [] top->[t]op
+sed = file | sed 'N;s/\n/\t/' > file.num     # Number lines on a file
+
+REGULAR EXPRESSIONS
+\^$.|?*+()                          # special characters any other will match themselves
+\                                    # escapes special characters and treat as literal
+*                                    # repeat the previous item zero or more times
+.                                    # single character except line break characters
+.*                                   # match zero or more characters
+^                                    # match at the start of a line/string
+$                                    # match at the end of a line/string
+.$                                   # match a single character at the end of line/string
+^ $                                  # match line with a single space
+^[A-Z]                               # match any line beginning with any char from A to Z
